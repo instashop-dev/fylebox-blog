@@ -1,0 +1,61 @@
+---
+import { SHOW_SOCIAL_LINKS, POST_ON_HOME_PAGE } from "../consts";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/post/PostCard.astro";
+import { getCollection } from "astro:content";
+import SocialLinks from "../components/SocialLinks.astro";
+import { getPublishedPosts, sortPostsByDate } from "../utils/filterts";
+import FeaturedCategory from "../components/FeaturedCategory.astro";
+
+const allPosts = await getCollection("blog");
+const published = getPublishedPosts(allPosts);
+const sortedByDate = sortPostsByDate(published);
+const posts = sortedByDate.slice(0, POST_ON_HOME_PAGE);
+---
+
+<BaseLayout
+  title="Home page"
+  description="Check out my blog for a deep dive into Lorem Ipsum. You'll find comprehensive information about this intriguing topic, exclusively available here."
+>
+  <section>
+    <div class="pt-2 pb-9">
+      <h1 class="mb-4 text-4xl font-extrabold text-gray-900">Build Better Imports</h1>
+      <p class="text-lg md:text-xl font-normal text-gray-700">
+         Insights on data onboarding, CSV parsing, and building seamless import flows for modern SaaS apps.
+      </p>
+      
+    </div>
+  </section>
+
+  <section class="mb-9">
+    <h2 class="text-3xl font-bold mb-9">Categories</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-16 mt-4">
+     <FeaturedCategory title="Use Cases"
+      content="See how real teams use imports." 
+      href="use-cases" 
+      />
+      <FeaturedCategory
+        title="Alternatives"
+        content="Compare tools. Find the best fit."
+        href="alternatives"
+      />        
+        <FeaturedCategory
+        title="Frameworks"
+        content="Add imports to any tech stack."
+        href="frameworks"
+      />
+           <FeaturedCategory
+        title="Integrations"
+        content="Connect spreadsheets to anything."
+        href="integrations"
+      />
+      <FeaturedCategory
+        title="No Code Workflows"
+        content="Automate imports without code."
+        href="no-code-workflows"
+      />
+    </div>
+  </section>
+
+
+</BaseLayout>

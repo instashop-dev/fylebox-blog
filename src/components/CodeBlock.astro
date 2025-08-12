@@ -1,0 +1,203 @@
+---
+// Enhanced Code Block Component with Copy Functionality
+export interface Props {
+  code: string;
+  language?: string;
+  title?: string;
+  showLineNumbers?: boolean;
+  class?: string;
+}
+
+const { 
+  code, 
+  language = 'text', 
+  title, 
+  showLineNumbers = false, 
+  class: className = "" 
+} = Astro.props;
+
+// Generate unique ID for this code block
+const codeId = `code-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class={`code-block-wrapper ${className}`}>
+  {title && <div class="code-title">{title}</div>}
+  <pre data-lang={language} class="format-pre">
+    <code id={codeId} class={`language-${language}`}>
+      {showLineNumbers 
+        ? code.split('\n').map((line, index) => 
+            `<span class="line-number">${index + 1}</span>${line}`
+          ).join('\n')
+        : code
+      }
+    </code>
+  </pre>
+  <button 
+    class="copy-button" 
+    data-code-id={codeId}
+    type="button"
+    aria-label="Copy code to clipboard"
+  >
+    <span class="copy-text">Copy</span>
+    <span class="copied-text">Copied!</span>
+  </button>
+</div>
+
+<script>
+  // Copy functionality
+  function setupCopyButtons() {
+    const copyButtons = document.querySelectorAll('.copy-button');
+    
+    copyButtons.forEach(button => {
+      // Add null check for button
+      if (!button) return;
+      
+      button.addEventListener('click', async () => {
+        const codeId = button.getAttribute('data-code-id');
+        if (!codeId) return;
+        
+        const codeElement = document.getElementById(codeId);
+        if (!codeElement) return;
+        
+        // Get the code text (remove line numbers if present)
+        let codeText = codeElement.textContent || '';
+        
+        // Remove line numbers if they exist
+        codeText = codeText.replace(/^\d+/gm, '').trim();
+        
+        try {
+          await navigator.clipboard.writeText(codeText);
+          
+          // Visual feedback - check if button still exists
+          if (button && button.classList) {
+            button.classList.add('copied');
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+              if (button && button.classList) {
+                button.classList.remove('copied');
+              }
+            }, 2000);
+          }
+          
+        } catch (err) {
+          console.error('Failed to copy code: ', err);
+          
+          // Fallback for browsers that don't support clipboard API
+          const textArea = document.createElement('textarea');
+          textArea.value = codeText;
+          textArea.style.position = 'fixed';
+          textArea.style.opacity = '0';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          
+          try {
+            document.execCommand('copy');
+            if (button && button.classList) {
+              button.classList.add('copied');
+              setTimeout(() => {
+                if (button && button.classList) {
+                  button.classList.remove('copied');
+                }
+              }, 2000);
+            }
+          } catch (fallbackErr) {
+            console.error('Fallback copy failed: ', fallbackErr);
+          }
+          
+          if (document.body.contains(textArea)) {
+            document.body.removeChild(textArea);
+          }
+        }
+      });
+    });
+  }
+  
+  // Initialize copy buttons when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCopyButtons);
+  } else {
+    setupCopyButtons();
+  }
+  
+  // Re-initialize for SPA navigation
+  document.addEventListener('astro:page-load', setupCopyButtons);
+</script>
+
+<style>
+  .code-title {
+    background: rgb(31 41 55);
+    color: rgb(209 213 219);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border-bottom: 1px solid rgb(55 65 81);
+  }
+  
+  .code-title + pre {
+    border-radius: 0 0 0.5rem 0.5rem;
+    margin-top: 0;
+  }
+  
+  .line-number {
+    display: inline-block;
+    width: 3ch;
+    text-align: right;
+    margin-right: 1ch;
+    color: rgb(107 114 128);
+    user-select: none;
+    border-right: 1px solid rgb(55 65 81);
+    padding-right: 1ch;
+  }
+  
+  .copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(55, 65, 81, 0.9);
+    color: rgb(209, 213, 219);
+    border: 1px solid rgb(75, 85, 99);
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+  
+  .copy-button:hover {
+    background: rgba(75, 85, 99, 0.9);
+    border-color: rgb(107, 114, 128);
+  }
+  
+  .copy-button:active {
+    transform: scale(0.95);
+  }
+  
+  .format-pre {
+    position: relative;
+  }
+  
+  .copy-text {
+    display: inline;
+  }
+  
+  .copied-text {
+    display: none;
+  }
+  
+  .copy-button.copied .copy-text {
+    display: none;
+  }
+  
+  .copy-button.copied .copied-text {
+    display: inline;
+  }
+  
+  .copy-button.copied {
+    background: rgba(34, 197, 94, 0.9);
+    border-color: rgb(34, 197, 94);
+  }
+</style>

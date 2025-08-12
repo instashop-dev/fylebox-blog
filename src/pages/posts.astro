@@ -1,0 +1,44 @@
+---
+// This file handles the base /posts route by redirecting to /posts/1
+// or showing the first page directly
+
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/post/PostCard.astro";
+import Pagination from "../components/Pagination.astro";
+import { getPublishedPosts, sortPostsByDate } from "../utils/filterts";
+import { POSTS_PER_PAGE } from "../consts";
+
+// Get the first page of posts
+const posts = await getCollection("blog");
+const published = getPublishedPosts(posts);
+const sortedByDate = sortPostsByDate(published);
+
+// Create pagination for the first page
+const totalPages = Math.ceil(sortedByDate.length / POSTS_PER_PAGE);
+const firstPagePosts = sortedByDate.slice(0, POSTS_PER_PAGE);
+
+// Create a page object similar to what Astro's paginate function creates
+const page = {
+  data: firstPagePosts,
+  currentPage: 1,
+  lastPage: totalPages,
+  size: POSTS_PER_PAGE,
+  total: sortedByDate.length,
+  url: {
+    current: '/posts',
+    next: totalPages > 1 ? '/posts/2' : undefined,
+    prev: undefined
+  }
+};
+---
+
+<BaseLayout title="Explore all posts" description="- Browse every blog post I've written.">
+  <h1 class="text-4xl font-semibold mb-9">Explore all my posts</h1>
+  <section>
+    <ul class="space-y-4">
+      {page.data.map((post: any) => <PostCard post={post} />)}
+    </ul>
+  </section>
+  <Pagination currentPage={page.currentPage} totalPages={page.lastPage} path="posts/" />
+</BaseLayout>

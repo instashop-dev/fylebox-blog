@@ -1,0 +1,188 @@
+---
+// Optimized Image Component for Core Web Vitals
+import { getImage } from "astro:assets";
+
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  loading?: "lazy" | "eager";
+  priority?: boolean;
+  sizes?: string;
+  class?: string;
+  caption?: string;
+  quality?: number;
+}
+
+const {
+  src,
+  alt,
+  width = 800,
+  height,
+  loading = "lazy",
+  priority = false,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 800px, 1000px",
+  class: className = "",
+  caption,
+  quality = 80
+} = Astro.props;
+
+// Optimize loading strategy based on priority
+const loadingStrategy = priority ? "eager" : loading;
+const fetchPriority = priority ? "high" : "auto";
+
+// Generate optimized images for different sizes
+const optimizedImage = await getImage({
+  src: src,
+  width: width,
+  height: height,
+  quality: quality,
+  format: "webp"
+});
+
+const optimizedImageJPG = await getImage({
+  src: src,
+  width: width,
+  height: height,
+  quality: quality,
+  format: "jpg"
+});
+
+// Generate responsive images for better LCP
+const responsiveImages = [
+  await getImage({ src, width: 400, quality, format: "webp" }),
+  await getImage({ src, width: 800, quality, format: "webp" }),
+  await getImage({ src, width: 1200, quality, format: "webp" }),
+];
+
+const responsiveImagesJPG = [
+  await getImage({ src, width: 400, quality, format: "jpg" }),
+  await getImage({ src, width: 800, quality, format: "jpg" }),
+  await getImage({ src, width: 1200, quality, format: "jpg" }),
+];
+---
+
+<figure class={`optimized-image-wrapper ${className}`}>
+  <picture>
+    <!-- WebP sources -->
+    <source
+      media="(max-width: 640px)"
+      srcset={responsiveImages[0].src}
+      type="image/webp"
+    />
+    <source
+      media="(max-width: 1024px)"
+      srcset={responsiveImages[1].src}
+      type="image/webp"
+    />
+    <source
+      media="(min-width: 1025px)"
+      srcset={responsiveImages[2].src}
+      type="image/webp"
+    />
+    
+    <!-- Fallback JPG sources -->
+    <source
+      media="(max-width: 640px)"
+      srcset={responsiveImagesJPG[0].src}
+      type="image/jpeg"
+    />
+    <source
+      media="(max-width: 1024px)"
+      srcset={responsiveImagesJPG[1].src}
+      type="image/jpeg"
+    />
+    <source
+      media="(min-width: 1025px)"
+      srcset={responsiveImagesJPG[2].src}
+      type="image/jpeg"
+    />
+    
+    <!-- Main image -->
+    <img
+      src={optimizedImageJPG.src}
+      alt={alt || ""}
+      width={optimizedImage.attributes.width}
+      height={optimizedImage.attributes.height}
+      loading={loadingStrategy}
+      decoding="async"
+      sizes={sizes}
+      class="optimized-image"
+      fetchpriority={fetchPriority}
+      data-priority={priority ? "high" : "normal"}
+      role={alt ? "img" : "presentation"}
+      aria-describedby={caption ? "img-caption-" + Math.random().toString(36).substr(2, 9) : undefined}
+    />
+  </picture>
+  
+  {caption && (
+    <figcaption 
+      class="image-caption text-sm text-gray-600 mt-2 text-center"
+      id={caption ? "img-caption-" + Math.random().toString(36).substr(2, 9) : undefined}
+    >
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .optimized-image-wrapper {
+    margin: 2rem 0;
+    display: block;
+  }
+
+  .optimized-image {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .optimized-image:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+  }
+
+  .image-caption {
+    text-align: center;
+    font-size: 0.875rem;
+    color: rgb(107 114 128);
+    margin-top: 0.75rem;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .dark .image-caption {
+    color: rgb(156 163 175);
+  }
+
+  /* Aspect ratio containers for CLS prevention */
+  .optimized-image-wrapper::before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio by default */
+    position: relative;
+  }
+
+  .optimized-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<!-- Preload critical images -->
+{priority && (
+  <link
+    rel="preload"
+    as="image"
+    href={optimizedImage.src}
+    media={sizes}
+  />
+)}

@@ -1,0 +1,148 @@
+---
+import { SITE_TITLE, SITE_URL, GITHUB, LINKEDIN, X, EMAIL } from "../consts";
+import GithubIcon from "./icons/GithubIcon.astro";
+import LinkedinIcon from "./icons/LinkedinIcon.astro";
+import XIcon from "./icons/XIcon.astro";
+import EmailIcon from "./icons/EmailIcon.astro";
+
+const today = new Date();
+---
+
+<footer class="bg-gray-50 border-t border-gray-200" role="contentinfo">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      
+      <!-- Company Section -->
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">CSVBox</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            The easiest way to import CSV data into your application. Build better data import experiences with our powerful API and embeddable components.
+          </p>
+        </div>
+        <div class="flex space-x-4" role="list" aria-label="Social media links">    
+         
+          {X && (
+            <a
+              href={X}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-gray-500 hover:text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
+              aria-label="Follow us on X (formerly Twitter)"
+            >
+              <XIcon />
+            </a>
+          )}
+          {EMAIL && (
+            <a
+              href={EMAIL}
+              class="text-gray-500 hover:text-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
+              aria-label="Send us an email"
+            >
+              <EmailIcon />
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Product Section -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Product</h3>
+        <nav aria-label="Product links">
+          <ul class="space-y-3">
+            <li>
+              <a href="https://csvbox.io" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                CSV Importer
+              </a>
+            </li>
+            <li>
+              <a href="https://csvbox.io/features" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Features
+              </a>
+            </li>
+            <li>
+              <a href="https://csvbox.io/#pricing" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Pricing
+              </a>
+            </li>
+            <li>
+              <a href="https://csvbox.io/integrations" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Integrations
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Resources Section -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Resources</h3>
+        <nav aria-label="Resource links">
+          <ul class="space-y-3">
+            <li>
+              <a href="https://docs.csvbox.io" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a href="/posts" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Blog
+              </a>
+            </li>
+            <li>
+              <a href="https://csvbox.io/#demo" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Demo
+              </a>
+            </li>
+            <li>
+              <a href="https://help.csvbox.io/change-log" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Changelog
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Company Section -->
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Company</h3>
+        <nav aria-label="Company links">
+          <ul class="space-y-3">
+            <li>
+              <a href="/about" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="https://share.hsforms.com/1ubpg6RBoQgKOISkRMEViwg5auur" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Contact
+              </a>
+            </li>
+            <li>
+              <a href="https://csvbox.io/privacy" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="https://csvbox.io/terms" class="text-gray-600 hover:text-gray-900 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 rounded">
+                Terms of Service
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-12 pt-8 border-t border-gray-200">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <div class="text-sm text-gray-600">
+          © {today.getFullYear()} CSVBox. All rights reserved.
+        </div>
+        <div class="text-sm text-gray-600">
+          Made with ❤️ for better data imports
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,486 @@
+---
+import "../styles/global.css";
+import { GOOGLE_ANALYTICS_ID, OPEN_GRAPH_IMAGE, SITE_TITLE } from "../consts";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  article?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  author?: string;
+  tags?: string[];
+  readingTime?: number;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { 
+  title, 
+  description, 
+  image = OPEN_GRAPH_IMAGE,
+  article = false,
+  publishedTime,
+  modifiedTime,
+  author = "CSVBox Team",
+  tags = [],
+  readingTime
+} = Astro.props;
+
+const baseUrl = "";
+const fullImageUrl = new URL(image.startsWith('http') ? image : `/${image}`, Astro.url);
+
+// Generate structured data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": article ? "Article" : "WebSite",
+  "name": title,
+  "headline": title,
+  "description": description,
+  "url": canonicalURL.href,
+  "image": fullImageUrl.href,
+  ...(article && {
+    "author": {
+      "@type": "Organization",
+      "name": author,
+      "url": Astro.site?.href
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "CSVBox",
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL("/logo.png", Astro.url).href
+      }
+    },
+    "datePublished": publishedTime,
+    "dateModified": modifiedTime || publishedTime,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": canonicalURL.href
+    },
+    ...(readingTime && {
+      "timeRequired": `PT${readingTime}M`
+    }),
+    ...(tags.length > 0 && {
+      "keywords": tags.join(", ")
+    })
+  }),
+  ...(!article && {
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": `${Astro.site?.href}search?q={search_term_string}`
+      },
+      "query-input": "required name=search_term_string"
+    }
+  })
+};
+
+// Breadcrumb structured data for articles
+const breadcrumbData = article ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": Astro.site?.href
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": new URL("/posts", Astro.site).href
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": title,
+      "item": canonicalURL.href
+    }
+  ]
+} : null;
+---
+
+  <!-- High priority meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Critical resource hints -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  
+  <!-- Favicon and basic resources -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL("/rss.xml", Astro.url)} />
+  
+  <!-- Critical font loading optimization -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin />
+  
+  <!-- Inline critical font CSS to eliminate render blocking -->
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+  </style>
+
+  <!-- Optimized Google Analytics with Partytown -->
+  <script type="partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-P4S83D0858"></script>
+  <script type="partytown">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-P4S83D0858');
+  </script>
+  
+  <!-- Expanded critical CSS - all above-the-fold styles -->
+  <style>
+    /* Critical CSS for immediate rendering - comprehensive above-the-fold */
+    html { 
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+    body { 
+      margin: 0; 
+      padding: 0;
+      background-color: #f9fafb; 
+      color: #111827;
+      font-size: 16px;
+      line-height: 1.6;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    }
+    .dark body { 
+      background-color: #1f2937; 
+      color: #f9fafb; 
+    }
+    
+    /* Header styles */
+    header { 
+      background-color: #ffffff; 
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      width: 100%;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    }
+    .dark header { 
+      background-color: #374151; 
+      border-bottom-color: #4b5563; 
+    }
+    
+    /* Navigation styles */
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 4rem;
+    }
+    
+    /* Main content */
+    main { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 0 1rem;
+      min-height: calc(100vh - 200px);
+      flex: 1;
+    }
+    
+    /* Typography */
+    h1 { 
+      font-size: 2.25rem; 
+      font-weight: 700; 
+      line-height: 1.2; 
+      margin: 2rem 0;
+      color: #111827;
+    }
+    h2 { 
+      font-size: 1.875rem; 
+      font-weight: 700; 
+      line-height: 1.3; 
+      margin: 1.5rem 0 1rem 0;
+      color: #111827;
+    }
+    h3, h4, h5, h6 {
+      font-weight: 600;
+      line-height: 1.25;
+      margin: 1.5rem 0 1rem 0;
+      color: #111827;
+    }
+    p {
+      margin: 0 0 1rem 0;
+      color: #374151;
+      line-height: 1.75;
+    }
+    
+    /* Dark mode text */
+    .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+      color: #ffffff;
+    }
+    .dark p {
+      color: #d1d5db;
+    }
+    
+    /* Links */
+    a {
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    a:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+    .dark a {
+      color: #66a3ff;
+    }
+    .dark a:hover {
+      color: #4d8cff;
+    }
+    
+    /* Layout utilities */
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .grid { display: grid; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .h-screen { height: 100vh; }
+    .max-w-sm { max-width: 24rem; }
+    .max-w-4xl { max-width: 56rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-9 { margin-bottom: 2.25rem; }
+    .mt-9 { margin-top: 2.25rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-3xl { font-size: 1.875rem; }
+    .font-bold { font-weight: 700; }
+    .font-semibold { font-weight: 600; }
+    .text-gray-900 { color: #111827; }
+    .text-gray-600 { color: #4b5563; }
+    .text-white { color: #ffffff !important; }
+    .bg-white { background-color: #ffffff; }
+    .bg-gray-50 { background-color: #f9fafb; }
+    .bg-gray-800 { background-color: #1f2937; }
+    .border { border-width: 1px; }
+    .border-gray-200 { border-color: #e5e7eb; }
+    .border-gray-700 { border-color: #374151; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+    
+    /* Grid system */
+    .grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .col-span-full { grid-column: 1 / -1; }
+    .col-start-3 { grid-column-start: 3; }
+    .col-span-8 { grid-column: span 8 / span 8; }
+    .gap-6 { gap: 1.5rem; }
+    
+    /* Images optimization */
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0.5rem;
+    }
+    
+    /* Loading states to prevent CLS */
+    .prose img {
+      aspect-ratio: attr(width) / attr(height);
+      background-color: #f3f4f6;
+      transition: opacity 0.3s ease;
+    }
+    
+    /* Responsive design */
+    @media (min-width: 768px) { 
+      h1 { font-size: 3rem; }
+      h2 { font-size: 2.25rem; }
+      main { padding: 0; }
+      .md\\:text-5xl { font-size: 3rem; }
+      .md\\:mx-auto { margin-left: auto; margin-right: auto; }
+      .md\\:px-0 { padding-left: 0; padding-right: 0; }
+      .md\\:col-start-3 { grid-column-start: 3; }
+      .md\\:col-span-8 { grid-column: span 8 / span 8; }
+    }
+    
+    /* Enhanced focus states for accessibility - better visibility */
+    *:focus {
+      outline: 3px solid #2563eb !important;
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+    
+    *:focus-visible {
+      outline: 3px solid #2563eb !important;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Enhanced focus for interactive elements */
+    a:focus, button:focus, input:focus, textarea:focus, select:focus, [tabindex]:focus {
+      outline: 3px solid #2563eb !important;
+      outline-offset: 2px;
+      border-radius: 3px;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Skip link for screen readers */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    
+    .sr-only:focus,
+    .focus\\:not-sr-only:focus {
+      position: static !important;
+      width: auto !important;
+      height: auto !important;
+      padding: 0.5rem 1rem !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      clip: auto !important;
+      white-space: normal !important;
+    }
+    
+    /* Enhanced link contrast */
+    a {
+      color: #1d4ed8;
+    }
+    a:hover {
+      color: #1e40af;
+    }
+    a:visited {
+      color: #7c3aed;
+    }
+    
+    /* High contrast mode support - Enhanced for better accessibility */
+    @media (prefers-contrast: high) {
+      .text-gray-400 { color: #111827 !important; }
+      .text-gray-500 { color: #111827 !important; }
+      .text-gray-600 { color: #111827 !important; }
+      .text-gray-700 { color: #000000 !important; }
+      
+      /* Ensure all interactive elements have high contrast */
+      a:not(button a):not(.btn a):not([role=button] a) {
+        color: #000080 !important; /* Dark blue for better contrast */
+        text-decoration: underline !important;
+      }
+      
+      a:not(button a):not(.btn a):not([role=button] a):hover {
+        color: #000000 !important;
+        text-decoration: underline !important;
+      }
+      
+      /* High contrast borders */
+      .border-gray-200 { border-color: #000000 !important; }
+      .border-gray-300 { border-color: #000000 !important; }
+      .border-gray-700 { border-color: #000000 !important; }
+    }
+    
+    /* Reduce motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+    /* Hamburger menu styles for mobile */
+    .hamburger { display: block; }
+    @media (min-width: 768px) {
+      .hamburger { display: none; }
+    }
+    
+    /* Hidden utility */
+    .hidden { display: none; }
+  </style>
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href={canonicalURL} />
+
+  <!-- Primary Meta Tags -->
+  <title>{title} - {SITE_TITLE}</title>
+  <meta name="title" content={title} />
+  <meta name="description" content={description} />
+  
+  <!-- Enhanced SEO Meta Tags -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="language" content="en" />
+  {tags.length > 0 && <meta name="keywords" content={tags.join(", ")} />}
+  {author && <meta name="author" content={author} />}
+  {readingTime && <meta name="reading-time" content={`${readingTime} minutes`} />}
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={article ? "article" : "website"} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={fullImageUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:site_name" content={SITE_TITLE} />
+  <meta property="og:locale" content="en_US" />
+  
+  {article && publishedTime && (
+    <meta property="article:published_time" content={publishedTime} />
+  )}
+  {article && modifiedTime && (
+    <meta property="article:modified_time" content={modifiedTime} />
+  )}
+  {article && author && (
+    <meta property="article:author" content={author} />
+  )}
+  {article && tags.map(tag => (
+    <meta property="article:tag" content={tag} />
+  ))}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@csvbox" />
+  <meta name="twitter:creator" content="@csvbox" />
+  <meta name="twitter:url" content={canonicalURL} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={fullImageUrl} />
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  
+  {breadcrumbData && (
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbData)} />
+  )}
+</head>
+</head>

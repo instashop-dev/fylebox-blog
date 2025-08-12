@@ -1,0 +1,45 @@
+---
+const { title, content, href } = Astro.props;
+
+// Use Astro's site configuration for base URL
+const baseUrl = "";
+---
+
+<article
+  class="flex flex-col max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100"
+  itemscope
+  itemtype="https://schema.org/Article"
+>
+  <header>
+    <a href={`${baseUrl}/tags/${href}`}>
+      <h2 
+        class="mb-2 text-2xl font-bold tracking-tight text-gray-900"
+        itemprop="headline"
+      >
+        {title}
+      </h2>
+    </a>
+  </header>
+  
+  <div class="grow mb-3">
+    <p 
+      class="font-normal text-gray-700"
+      itemprop="description"
+    >
+      {content}
+    </p>
+  </div>
+  
+  <footer class="self-start">
+    <a
+      href={`${baseUrl}/tags/${href}`}
+      class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-primary-100 rounded-lg focus:ring-4 focus:outline-none focus:ring-primary-300"
+      aria-label={`Read more articles in ${title} category`}
+    >
+      Read more
+      <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+      </svg>
+    </a>
+  </footer>
+</article>
