@@ -1,5 +1,5 @@
 // Highly optimized service worker for 100% PageSpeed score
-const CACHE_NAME = 'csvbox-blog-v2.0';
+const CACHE_NAME = 'fylebox-blog-v2.0';
 const STATIC_CACHE = 'static-resources-v2.0';
 const DYNAMIC_CACHE = 'dynamic-content-v2.0';
 

@@ -2,8 +2,8 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://csvbox-blog.vercel.app/sitemap.xml
-Sitemap: https://csvbox-blog.vercel.app/rss.xml
+Sitemap: https://fylebox-blog.vercel.app/sitemap.xml
+Sitemap: https://fylebox-blog.vercel.app/rss.xml
 
 # Crawl-delay for better server performance
 Crawl-delay: 1

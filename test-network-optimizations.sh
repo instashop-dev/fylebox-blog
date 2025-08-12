@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Performance Testing Script for Network Dependency Optimizations
-echo "🚀 CSVBox Blog Network Optimization Test"
+echo "🚀 Fylebox Blog Network Optimization Test"
 echo "========================================"
 
 # Test if dev server is running

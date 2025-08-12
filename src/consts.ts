@@ -2,7 +2,7 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 const baseUrl = import.meta.env.BASE_URL;
 // Site config
-export const SITE_URL = "https://csvbox.io/"; // your https url
+export const SITE_URL = "https://fylebox.io/"; // your https url
 export const SITE_TITLE = "CSVBox Blog"; // your base page title
 export const SITE_DESCRIPTION = "Insights, tutorials, and updates from the CSVBox team. Learn about data management, CSV processing, and productivity tools."; // your base description
 export const HEADER_TITLE = ""; // your title used in header
@@ -20,9 +20,9 @@ export const POSTS_PER_PAGE = 50; // Pagination on 'Posts' page
 // Social config
 export const SHOW_SOCIAL_LINKS = true;
 export const GITHUB = "https://github.com/instashop-dev";
-export const LINKEDIN = "https://www.linkedin.com/company/csvbox";
-export const X = "https://x.com/csvbox";
-export const FACEBOOK = "https://facebook.com/csvbox";
-export const INSTAGRAM = "https://instagram.com/csvbox";
-export const EMAIL = "mailto:info@csvbox.io";
+export const LINKEDIN = "https://www.linkedin.com/company/fylebox";
+export const X = "https://x.com/fylebox";
+export const FACEBOOK = "https://facebook.com/fylebox";
+export const INSTAGRAM = "https://instagram.com/fylebox";
+export const EMAIL = "mailto:info@fylebox.io";
 export const RSS = `${baseUrl}/rss.xml`;

@@ -3,7 +3,7 @@
 # Accessibility Testing Script
 # Tests various accessibility features of the blog
 
-echo "🔍 Running Accessibility Tests for CSVBox Blog..."
+echo "🔍 Running Accessibility Tests for Fylebox Blog..."
 echo "================================================"
 
 # Check for build success

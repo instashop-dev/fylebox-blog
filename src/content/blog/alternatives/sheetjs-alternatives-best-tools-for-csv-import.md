@@ -182,12 +182,12 @@ SheetJS is a powerful tool for spreadsheet parsing—but it’s not a complete C
 
 From drag-and-drop uploads to schema validation and backend syncing, CSVBox handles the hard parts so you don’t have to.
 
-👉 [Try CSVBox for free](https://www.csvbox.io)  
-👉 [Book a demo](https://www.csvbox.io/demo) to see it in action
+👉 [Try CSVBox for free](https://www.fylebox.io)  
+👉 [Book a demo](https://www.fylebox.io/demo) to see it in action
 
 ---
 
 Looking for modern CSV import flows your users will love?  
 Trusted by SaaS teams to eliminate data onboarding friction.
 
-Canonical Source: https://www.csvbox.io/resources/sheetjs-alternatives-best-csv-import-tools
+Canonical Source: https://www.fylebox.io/resources/sheetjs-alternatives-best-csv-import-tools

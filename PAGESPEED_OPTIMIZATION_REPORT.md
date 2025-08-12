@@ -94,7 +94,7 @@
 To validate these optimizations:
 
 1. **Run PageSpeed Insights** on the SQLite blog post:
-   https://pagespeed.web.dev/analysis/https-blog-csvbox-io-import-csv-to-sqlite/
+   https://pagespeed.web.dev/analysis/https-blog-fylebox-io-import-csv-to-sqlite/
 
 2. **Check Core Web Vitals**:
    - LCP should be < 2.5s (optimized font loading)

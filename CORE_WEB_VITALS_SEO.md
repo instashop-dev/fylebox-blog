@@ -1,6 +1,6 @@
 # Core Web Vitals & SEO Optimization Guide
 
-This document outlines the comprehensive Core Web Vitals optimizations and SEO enhancements implemented for the CSVBox blog.
+This document outlines the comprehensive Core Web Vitals optimizations and SEO enhancements implemented for the Fylebox blog.
 
 ## 🚀 Core Web Vitals Optimizations
 
@@ -91,11 +91,11 @@ img, video, iframe {
   "description": "Article description",
   "author": {
     "@type": "Organization",
-    "name": "CSVBox Team"
+  "name": "Fylebox Team"
   },
   "publisher": {
     "@type": "Organization", 
-    "name": "CSVBox",
+  "name": "Fylebox",
     "logo": {
       "@type": "ImageObject",
       "url": "https://example.com/logo.png"
@@ -172,8 +172,8 @@ img, video, iframe {
 User-agent: *
 Allow: /
 
-Sitemap: https://csvbox-blog.vercel.app/sitemap.xml
-Sitemap: https://csvbox-blog.vercel.app/rss.xml
+Sitemap: https://fylebox-blog.vercel.app/sitemap.xml
+Sitemap: https://fylebox-blog.vercel.app/rss.xml
 
 Crawl-delay: 1
 ```

@@ -157,6 +157,6 @@ Absolutely. You can fully theme it to match your brand, delivering a native-feel
 
 ---
 
-📦 Build a better CSV import experience in minutes—try [CSVBox](https://www.csvbox.io) for free.
+📦 Build a better CSV import experience in minutes—try [CSVBox](https://www.fylebox.io) for free.
 
-_Canonical URL: https://www.csvbox.io/blog/open-source-csv-importers-alternatives-best-tools_
+_Canonical URL: https://www.fylebox.io/blog/open-source-csv-importers-alternatives-best-tools_
